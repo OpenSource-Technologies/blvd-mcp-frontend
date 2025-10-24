@@ -1,0 +1,93 @@
+<!-- <div *ngFor="let m of messages">
+    <strong>{{ m.role }}:</strong> {{ m.content }}
+  </div>
+  <input [(ngModel)]="userInput" placeholder="Type a message" />
+  <button (click)="send()">Send</button> -->
+
+
+
+  <!-- <div id="bot-container" class="chat-container">
+    <div class="messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="msg.sender">
+        <span>{{ msg.text }}</span>
+      </div>
+    </div>
+  
+    <div class="input-area">
+      <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message..." />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div> -->
+
+<!----- third--->
+
+  <!-- <div *ngIf="showBotChat" class="chat-area">
+    <div class="messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="msg.sender">
+        <span>{{ msg.text }}</span>
+      </div>
+    </div>
+  
+    <div class="input-area">
+      <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message..." />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+  
+  <div *ngIf="showHumanChat" class="chat-area">
+    <iframe
+      id="tawkChatFrame"
+      src="https://embed.tawk.to/61f6641a9bd1f31184da0b21/default"
+      width="100%"
+      height="100%"
+      frameborder="0"
+      style="border:none; min-height:400px;">
+    </iframe>
+  </div> -->
+
+
+  <!----- fourth --->
+  <!-- <div class="chat-window">
+    <div class="messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="msg.sender">
+        {{ msg.text }}
+      </div>
+    </div>
+  
+    <div class="input-area">
+      <input [(ngModel)]="userInput" placeholder="Type a message..." (keyup.enter)="sendMessage()" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div> -->
+
+
+<!-- 💬 Chat Toggle Button -->
+<!-- <button class="open-chat-btn" (click)="toggleChat()">
+  💬 Chat
+</button> -->
+  <div class="chat-container" >
+    <div class="messages">
+      <div *ngFor="let msg of chatMessages" [ngClass]="msg.sender">
+        <img *ngIf="msg.sender=='agent'" class="avatar" src="assets/user.svg" alt="Agent" />
+        <div class="message-text">{{ msg.text }}</div>
+      </div>
+
+
+      <!-- 🔹 Show loader message -->
+    <div *ngIf="isLoading" class="agent loading">
+      <div class="message-text">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+    </div>
+  
+    <div class="chat-input">
+      <input  [(ngModel)]="userInput" placeholder="Type a message..."  (keyup.enter)="sendMessage()" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+  
+  
+  
