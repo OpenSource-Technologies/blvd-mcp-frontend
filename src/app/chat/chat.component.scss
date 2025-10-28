@@ -184,11 +184,15 @@
 }
 
 .messages {
-  flex: 1;
+ // flex: 1;
   overflow-y: auto;
   padding: 15px;
   display: flex;
   flex-direction: column;
+  height: 73vh;
+  @media (min-width: 600px) {
+    height: 67vh;
+  }
 
   .user,
   .assistant {
@@ -583,6 +587,3 @@
   background-color: #f1ecec;
   display: inline-block;
 }
-
-
-

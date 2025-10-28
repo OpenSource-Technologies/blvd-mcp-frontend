@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../services/chat.services';
 import { HttpClient } from '@angular/common/http';
 
@@ -39,6 +39,8 @@ export class ChatComponent implements OnInit {
   //for last ui
 
   chatMessages: any[] = [];
+
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   constructor(
     private chatService: ChatService,
@@ -191,6 +193,20 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  ngAfterViewChecked() {
+    this.scrollToBottom(); // 👈 will scroll every time view updates
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.messagesContainer.nativeElement.scrollTop =
+        this.messagesContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.warn('Scroll error:', err);
+    }
+  }
+
+
   private async handleBotMessage(message: string) {
     try {
       const response: any = await this.http.post(
@@ -211,6 +227,8 @@ export class ChatComponent implements OnInit {
       } else {
         this.chatMessages.push({ role: 'assistant', content: userRole.content });
       }
+
+      this.scrollToBottom();
     } catch (error) {
       this.isLoading = false;
       console.error('Error:', error);
