@@ -65,29 +65,120 @@
 <!-- <button class="open-chat-btn" (click)="toggleChat()">
   💬 Chat
 </button> -->
-  <div class="chat-container" >
-    <div class="messages">
-      <div *ngFor="let msg of chatMessages" [ngClass]="msg.sender">
-        <img *ngIf="msg.sender=='agent'" class="avatar" src="assets/user.svg" alt="Agent" />
-        <div class="message-text">{{ msg.text }}</div>
-      </div>
 
 
-      <!-- 🔹 Show loader message -->
-    <div *ngIf="isLoading" class="agent loading">
-      <div class="message-text">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+
+<!-----basic design ------>
+<div >
+  <div>
+    <h1 class="headText">BLVD ChatBot,</h1></div>
+  <!-- <header class="chat-header">
+    <h1>wellmedr.</h1>
+    <button class="start-btn">Get Started</button>
+  </header> -->
+  <div class="main-chat-container">
+    <div class="chat-container" >
+      <div class="messages">
+        <div *ngFor="let msg of chatMessages" [ngClass]="msg.role">
+          <img *ngIf="msg.role=='assistant'" class="avatar" src="assets/user.svg" alt="Agent" />
+          <div class="message-text">{{ msg.content }}</div>
+        </div>
+
+
+      <div *ngIf="isLoading" class="agent loading">
+        <div class="message-text">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
       </div>
-    </div>
-    </div>
-  
-    <div class="chat-input">
-      <input  [(ngModel)]="userInput" placeholder="Type a message..."  (keyup.enter)="sendMessage()" />
-      <button (click)="sendMessage()">Send</button>
+      </div>
+    
+      <div class="fixedFooter">
+        <div class="chat-input">
+            <input
+              [(ngModel)]="userInput"
+              placeholder="Ask a question"
+              (keyup.enter)="sendMessage()"
+            />
+            <button (click)="sendMessage()">➤</button>
+
+        </div>
+        <div class="footerDiv">
+          <footer class="chat-footer">
+            Verified. Powered by OpenAI - ChatGPT-5
+          </footer>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+
+<!-- <ion-footer class="ion-margin-bottom">
+  <div class="chat-input">
+      <input
+        [(ngModel)]="userInput"
+        placeholder="Ask a question"
+        (keyup.enter)="sendMessage()"
+      />
+      <button (click)="sendMessage()">➤</button>
+  </div>
+</ion-footer> -->
+
+
+  <!-- <div class="chat-wrapper">
+    <header class="chat-header">
+      <h1>wellmedr.</h1>
+      <button class="start-btn" (click)="toggleChat()">Get Started</button>
+    </header>
+  
+    <div class="chat-container" *ngIf="isChatOpen">
+      <div class="messages">
+        <div class="message bot">
+          <div class="message-bubble intro">
+            Before we begin, I need to verify:
+            <ol>
+              <li>You're at least 18 years old</li>
+              <li>You reside in the United States</li>
+              <li>You understand I'm an AI assistant, and all final decisions are made by our medical team</li>
+            </ol>
+          </div>
+        </div>
+  
+        <div *ngFor="let msg of chatMessages" class="message" [ngClass]="msg.sender">
+          <div class="message-bubble">
+            <div class="message-meta">
+              <strong *ngIf="msg.sender === 'bot'">Clara</strong>
+              <span class="timestamp">{{ msg.time }}</span>
+            </div>
+            <div class="message-text">{{ msg.text }}</div>
+          </div>
+        </div>
+  
+        <div *ngIf="isLoading" class="message bot loading">
+          <div class="message-bubble typing">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="chat-input">
+        <input
+          [(ngModel)]="userInput"
+          placeholder="Ask a question or share your symptoms"
+          (keyup.enter)="sendMessage()"
+        />
+        <button (click)="sendMessage()">➤</button>
+      </div>
+  
+      <footer class="chat-footer">
+        Verified by licensed healthcare experts. Powered by OpenAI - ChatGPT-5
+      </footer>
+    </div>
+  </div> -->
+  
+
   
   
   

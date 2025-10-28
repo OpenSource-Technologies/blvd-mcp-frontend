@@ -27,13 +27,18 @@ export class ChatComponent implements OnInit {
 
 
 
-  chatMessages: { sender: string, text: string }[] = [
-    { sender: 'bot', text: 'Hi! How can I help you?' }
-  ];
+  // chatMessages: { sender: string, text: string }[] = [
+  //   { sender: 'bot', text: 'Hi! How can I help you?' }
+  // ];
   userInput = '';
   mode: 'bot' | 'agent' = 'bot'; // 👈 track current mode
 
   isChatOpen = false;
+
+
+  //for last ui
+
+  chatMessages: any[] = [];
 
   constructor(
     private chatService: ChatService,
@@ -168,13 +173,16 @@ export class ChatComponent implements OnInit {
 
 
 
+  /**for basic ui start*/
+
   async sendMessage() {
     const message = this.userInput.trim();
     console.log("message >> ",message)
     if (!message) return;
-    this.chatMessages.push({ sender: 'user', text: message });
+    this.chatMessages.push({ role: 'user', content: message });
     this.userInput = '';
     this.isLoading = true;
+    console.log("mode >> ",this.mode);
 
     if (this.mode === 'bot') {
       await this.handleBotMessage(message);
@@ -186,25 +194,27 @@ export class ChatComponent implements OnInit {
   private async handleBotMessage(message: string) {
     try {
       const response: any = await this.http.post(
-        'http://localhost:5678/webhook/ca7ad99c-d1cd-4237-b95d-5182c70a7d14/chat',
+       // 'http://localhost:5678/webhook/ca7ad99c-d1cd-4237-b95d-5182c70a7d14/chat',
+       'http://localhost:3000/chat',
         { chatInput: message }
       ).toPromise();
 
       console.log('Bot response:', response);
       this.isLoading = false;
+      let userRole = response.reply;
 
       // Check if backend says "agent"
-      if (response.output === 'agent') {
-        this.chatMessages.push({ sender: 'user', text: 'Connecting you to a human agent...' });
+      if (userRole.role === 'humanAgent') {
+        this.chatMessages.push({ role: 'user', content: 'Connecting you to a human agent...' });
         this.initTawkInline(); // initialize chat
         this.mode = 'agent';
       } else {
-        this.chatMessages.push({ sender: 'agent', text: response.output });
+        this.chatMessages.push({ role: 'assistant', content: userRole.content });
       }
     } catch (error) {
       this.isLoading = false;
       console.error('Error:', error);
-      this.chatMessages.push({ sender: 'bot', text: 'Error connecting to bot.' });
+      this.chatMessages.push({ role: 'bot', content: 'Error connecting to bot.' });
     }
   }
 
@@ -264,4 +274,38 @@ export class ChatComponent implements OnInit {
     //   });
     // };
   }
-}
+
+
+
+  //for last ui
+
+  
+  /**for basic ui end*/
+
+
+
+//   toggleChat() {
+//     this.isChatOpen = !this.isChatOpen;
+//   }
+
+//   sendMessage() {
+//     if (!this.userInput.trim()) return;
+
+//     const now = new Date();
+//     const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+//     this.chatMessages.push({ sender: 'user', text: this.userInput, time: time });
+//     const message = this.userInput;
+//     this.userInput = '';
+//     this.isLoading = true;
+
+//     setTimeout(() => {
+//       this.isLoading = false;
+//       const reply = this.mockBotResponse(message);
+//       this.chatMessages.push({ sender: 'bot', text: reply, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+//     }, 1500);
+//   }
+
+//   mockBotResponse(input: string) {
+//     return `You said: "${input}". I'm Clara, your AI medical assistant.`;
+//   }
+ }
