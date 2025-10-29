@@ -189,7 +189,7 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
-  height: 73vh;
+  height: 70vh;
   @media (min-width: 600px) {
     height: 67vh;
   }
@@ -232,11 +232,11 @@
       font-size: 14px;
     }
 
-    @media (max-width: 480px) {
-      max-width: 90%;
-      font-size: 13px;
-      padding: 8px 12px;
-    }
+    // @media (max-width: 480px) {
+    //   max-width: 90%;
+    //   font-size: 13px;
+    //   padding: 8px 12px;
+    // }
   }
 }
 
@@ -575,7 +575,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
 }
 
 .chat-footer {
