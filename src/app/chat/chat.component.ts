@@ -16,6 +16,8 @@ declare global {
 export class ChatComponent implements OnInit {
 
   public messages:any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
+
+  mainUrl:any = 'http://localhost:3000/chat';
   //public userInput = '';
   //chatMessages: { sender: string, text: string }[] = [];
   //userInput: string = '';
@@ -211,7 +213,7 @@ export class ChatComponent implements OnInit {
     try {
       const response: any = await this.http.post(
        // 'http://localhost:5678/webhook/ca7ad99c-d1cd-4237-b95d-5182c70a7d14/chat',
-       'http://localhost:3000/chat',
+       this.mainUrl,
         { chatInput: message }
       ).toPromise();
 
