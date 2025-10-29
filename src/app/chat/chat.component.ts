@@ -17,7 +17,9 @@ export class ChatComponent implements OnInit {
 
   public messages:any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
-  mainUrl:any = 'http://localhost:3000/chat';
+  //mainUrl:any = 'http://localhost:3000/chat';
+  mainUrl:any = ' https://middleware.ostlive.com/chat';
+
   //public userInput = '';
   //chatMessages: { sender: string, text: string }[] = [];
   //userInput: string = '';
