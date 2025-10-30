@@ -1,13 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 body{
-    background-color: white;// #F7E9D7;
+    background-color: white;
+    overflow-y: hidden;
 }
 
 :root {
-  --primary-color: #ffffff; //color code in secondary color
-  --secondary-color: #8143B1; //user msg background
+  --primary-color: #ffffff; /*c olor code in secondary color*/
+  --secondary-color: #8143B1; /*user msg background*/
   --secondary-color-light: #e5cef7;
   --secondary-color-light-text: #000000;
-  --primary-theme-color: #e9ecef; //agent msg background
-  --light-gray: #333 //color code in primary theme
+  --primary-theme-color: #e9ecef; /*agent msg background*/
+  --light-gray: #333 /*color code in primary theme*/
 }
