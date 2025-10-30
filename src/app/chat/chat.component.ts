@@ -17,8 +17,8 @@ export class ChatComponent implements OnInit {
 
   public messages:any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
-  //mainUrl:any = 'http://localhost:3000/chat';
-  mainUrl:any = ' https://middleware.ostlive.com/chat';
+  mainUrl:any = 'http://localhost:3000/chat';
+  //mainUrl:any = ' https://middleware.ostlive.com/chat';
 
   //public userInput = '';
   //chatMessages: { sender: string, text: string }[] = [];
@@ -43,6 +43,8 @@ export class ChatComponent implements OnInit {
   //for last ui
 
   chatMessages: any[] = [];
+
+  isMsgSend:boolean =false;
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
@@ -182,18 +184,23 @@ export class ChatComponent implements OnInit {
   /**for basic ui start*/
 
   async sendMessage() {
-    const message = this.userInput.trim();
-    console.log("message >> ",message)
-    if (!message) return;
-    this.chatMessages.push({ role: 'user', content: message });
-    this.userInput = '';
-    this.isLoading = true;
-    console.log("mode >> ",this.mode);
+    if(!this.isMsgSend){
+      this.isMsgSend = true;
+      const message = this.userInput.trim();
+      console.log("message >> ",message)
+      if (!message) return;
+      this.chatMessages.push({ role: 'user', content: message });
+      this.userInput = '';
+      this.isLoading = true;
+      console.log("mode >> ",this.mode);
 
-    if (this.mode === 'bot') {
-      await this.handleBotMessage(message);
-    } else {
-      this.handleHumanMessage(message);
+      if (this.mode === 'bot') {
+        await this.handleBotMessage(message);
+        this.isMsgSend = false;
+      } else {
+        this.handleHumanMessage(message);
+        this.isMsgSend = false;
+      }
     }
   }
 
