@@ -81,7 +81,8 @@
       <div #messagesContainer class="messages">
         <div *ngFor="let msg of chatMessages" [ngClass]="msg.role">
           <img *ngIf="msg.role=='assistant'" class="avatar" src="assets/user.svg" alt="Agent" />
-          <div class="message-text">{{ msg.content }}</div>
+          <!-- <div class="message-text">{{ msg.content }}</div> -->
+          <div class="message-text" [innerHTML]="getContent(msg.content)"></div>
         </div>
 
 

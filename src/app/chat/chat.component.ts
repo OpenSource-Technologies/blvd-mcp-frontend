@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../services/chat.services';
 import { HttpClient } from '@angular/common/http';
-
+import { marked } from 'marked';
 declare global {
   interface Window {
     Tawk_API?: any;
@@ -265,6 +265,10 @@ export class ChatComponent implements OnInit {
     } else {
       console.warn('Tawk_API not ready');
     }
+  }
+
+  getContent(data:any){
+    return marked(data);
   }
 
   private initTawkInline() {
