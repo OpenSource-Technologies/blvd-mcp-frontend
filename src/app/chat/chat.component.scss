@@ -29,17 +29,17 @@
 
   /* 📱 Small screens (mobile) */
   @media (max-width: 600px) {
-    height: 77dvh;
+    height: 72dvh;
   }
 
   /* 💻 Medium screens (tablets/laptops) */
-  @media (min-width: 601px) and (max-width: 1024px) {
-    height: 80dvh;
+  @media (min-width: 601px)  and (max-width: 1024px){
+    height: 70dvh;
   }
 
   /* 🖥️ Large screens (desktops) */
   @media (min-width: 1025px) {
-    height: 85dvh;
+    height: 70dvh;
   }
 
   .user,
