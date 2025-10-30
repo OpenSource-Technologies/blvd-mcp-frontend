@@ -25,9 +25,21 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  height: 70dvh; /* Default: 70% of viewport height */
+
+  /* 📱 Small screens (mobile) */
   @media (max-width: 600px) {
-    height: 77vh;
+    height: 77dvh;
+  }
+
+  /* 💻 Medium screens (tablets/laptops) */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    height: 80dvh;
+  }
+
+  /* 🖥️ Large screens (desktops) */
+  @media (min-width: 1025px) {
+    height: 85dvh;
   }
 
   .user,
