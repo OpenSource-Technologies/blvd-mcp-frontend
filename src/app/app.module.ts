@@ -19,7 +19,7 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

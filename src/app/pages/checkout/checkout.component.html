@@ -1,205 +1,96 @@
-<header class="header padding-horizontal">
-    <div class="toolbar padding-vertical">
-      <h1 class="title">Checkout</h1>
-    </div>
-  </header>
-  
-  <main class="page-content padding-horizontal" style="padding-bottom: 80px;">
+ 
+  <div class="page-content padding-horizontal" style="padding-bottom: 80px; width: 60%; margin:20px auto">
+
     <form [formGroup]="checkoutForm" (ngSubmit)="checkout()" novalidate>
-  
-      <!-- My Information Section -->
-      <!-- <section>
-        <h2 class="section-title">My Information</h2>
-  
-        <div class="row">
-          <div class="col-md-6 col-12">
-            <label>First Name</label>
-            <input
-              formControlName="firstName"
-              type="text"
-              minlength="3"
-              maxlength="15"
-              (keyup)="firstNameValidation($event,15)"
-              placeholder="First Name"
-            />
-            <div class="error" *ngIf="checkoutForm.get('firstName')?.touched && checkoutForm.get('firstName')?.invalid">
-              <small *ngIf="checkoutForm.get('firstName')?.hasError('required')">
-                This field is required
-              </small>
-              <small
-                *ngIf="(checkoutForm.get('firstName')?.hasError('pattern') && !checkoutForm.get('firstName')?.hasError('required')) 
-                || ((checkoutForm.get('firstName')?.hasError('minlength') || checkoutForm.get('firstName')?.hasError('maxlength')) && !checkoutForm.get('firstName')?.hasError('required'))">
-                Invalid First Name
-              </small>
-            </div>
-          </div>
-  
-          <div class="col-md-6 col-12">
-            <label>Last Name</label>
-            <input
-              formControlName="lastName"
-              type="text"
-              minlength="3"
-              maxlength="15"
-              (keyup)="firstNameValidation($event,15)"
-              placeholder="Last Name"
-            />
-            <div class="error" *ngIf="checkoutForm.get('lastName')?.touched && checkoutForm.get('lastName')?.invalid">
-              <small *ngIf="checkoutForm.get('lastName')?.hasError('required')">
-                This field is required
-              </small>
-              <small
-                *ngIf="(checkoutForm.get('lastName')?.hasError('pattern') && !checkoutForm.get('lastName')?.hasError('required')) 
-                || ((checkoutForm.get('lastName')?.hasError('minlength') || checkoutForm.get('lastName')?.hasError('maxlength')) && !checkoutForm.get('lastName')?.hasError('required'))">
-                Invalid Last Name
-              </small>
-            </div>
-          </div>
-        </div>
-  
-        <div>
-          <label>Email</label>
-          <input formControlName="email" type="email" placeholder="Email" />
-          <div class="error" *ngIf="checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid">
-            <small *ngIf="checkoutForm.get('email')?.hasError('required')">
-              This field is required
-            </small>
-            <small *ngIf="checkoutForm.get('email')?.hasError('pattern') && !checkoutForm.get('email')?.hasError('required')">
-              Invalid Email
-            </small>
-          </div>
-        </div>
-  
-        <div>
-          <label>Phone Number</label>
-          <input formControlName="phone" type="tel" placeholder="Phone Number" />
-          <div class="error" *ngIf="checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid">
-            <small *ngIf="checkoutForm.get('phone')?.hasError('required')">
-              This field is required
-            </small>
-            <small *ngIf="isInvalid('phone') && !checkoutForm.get('phone')?.hasError('required')">
-              Invalid Number
-            </small>
-          </div>
-        </div>
-  
-        <hr />
-      </section> -->
 
   
       <!-- Credit Card Info -->
-      <!-- <section>
-        <h2 class="section-title">Card Details</h2>
-  
-        <div class="row">
-          <div class="col-md-6 col-12">
-            <label>Name</label>
-            <input formControlName="cardName" type="text" minlength="3" maxlength="20" placeholder="Name" />
-          </div>
-  
-          <div class="col-md-6 col-12">
-            <label>Card Number</label>
-            <input formControlName="cardNumber" placeholder="4111 1111 1111 1111" />
-          </div>
-  
-          <div class="col-md-6 col-12">
-            <label>Expiry Date</label>
-            <input formControlName="expiryDate" placeholder="MM/YYYY" />
-          </div>
-  
-          <div class="col-md-6 col-12">
-            <label>CVV</label>
-            <input formControlName="cvv" placeholder="***" maxlength="3" type="password" />
-          </div>
-  
-          <div class="col-md-6 col-12">
-            <label>Zipcode</label>
-            <input formControlName="postal_code" placeholder="12345" maxlength="6" />
-          </div>
-        </div>
-      </section> -->
-    
-    
       
-      <section class="card-section">
-        <h2 class="section-title">Card Details</h2>
+      <section class="checkout-wrapper">
+        <div class="checkout-card">
+          <h2 class="section-title">💳 Card Details</h2>
       
-        <div class="card-form">
-          <div class="row g-3">
-            <!-- Cardholder Name -->
-            <div class="col-md-6 col-12">
-              <label class="form-label">Name on Card</label>
-              <input
-                formControlName="cardName"
-                type="text"
-                minlength="3"
-                maxlength="20"
-                placeholder="John Doe"
-                class="form-control"
-              />
-              <div class="error" *ngIf="checkoutForm.get('cardName')?.touched && checkoutForm.get('cardName')?.invalid">
-                <small *ngIf="checkoutForm.get('cardName')?.hasError('required')">Name is required</small>
-                <small *ngIf="checkoutForm.get('cardName')?.hasError('minlength')">Enter a valid name</small>
+          <form [formGroup]="checkoutForm" class="card-form">
+            <div class="row">
+              <!-- Cardholder Name -->
+              <div >
+                <label class="form-label">Name on Card</label>
+                <input
+                  formControlName="cardName"
+                  type="text"
+                  minlength="3"
+                  maxlength="20"
+                  placeholder="John Doe"
+                  class="form-control"
+                />
+                <div class="error" *ngIf="checkoutForm.get('cardName')?.touched && checkoutForm.get('cardName')?.invalid">
+                  <small *ngIf="checkoutForm.get('cardName')?.hasError('required')">Name is required</small>
+                  <small *ngIf="checkoutForm.get('cardName')?.hasError('minlength')">Enter a valid name</small>
+                </div>
+              </div>
+      
+              <!-- Card Number -->
+              <div class="col-md-6 col-12">
+                <label class="form-label">Card Number</label>
+                <div class="input-icon">
+                  <input
+                    (input)="formatCardNumber($event)"
+                    formControlName="cardNumber"
+                    placeholder="4111 1111 1111 1111"
+                    maxlength="19"
+                    class="form-control"
+                  />
+                </div>
+                <div class="error" *ngIf="checkoutForm.get('cardNumber')?.touched && checkoutForm.get('cardNumber')?.invalid">
+                  <small *ngIf="checkoutForm.get('cardNumber')?.hasError('required')">Card number is required</small>
+                </div>
+              </div>
+      
+              <!-- Expiry Date -->
+              <div class="col-md-4 col-6">
+                <label class="form-label">Expiry Date</label>
+                <input
+                  formControlName="expiryDate"
+                  placeholder="MM/YY"
+                  maxlength="5"
+                  class="form-control"
+                  (input)="formatExpiryDate($event)"
+                />
+              </div>
+      
+              <!-- CVV -->
+              <div class="col-md-4 col-6">
+                <label class="form-label">CVV</label>
+                <input
+                  formControlName="cvv"
+                  placeholder="***"
+                  maxlength="3"
+                  type="password"
+                  class="form-control"
+                />
+              </div>
+      
+              <!-- ZIP Code -->
+              <div class="col-md-4 col-12">
+                <label class="form-label">ZIP Code</label>
+                <input
+                  formControlName="postal_code"
+                  placeholder="12345"
+                  maxlength="6"
+                  class="form-control"
+                />
               </div>
             </div>
       
-            <!-- Card Number -->
-            <div class="col-md-6 col-12">
-              <label class="form-label">Card Number</label>
-              <input
-                formControlName="cardNumber"
-                placeholder="4111 1111 1111 1111"
-                maxlength="19"
-                class="form-control"
-              />
-              <div class="error" *ngIf="checkoutForm.get('cardNumber')?.touched && checkoutForm.get('cardNumber')?.invalid">
-                <small *ngIf="checkoutForm.get('cardNumber')?.hasError('required')">Card number is required</small>
-              </div>
-            </div>
-      
-            <!-- Expiry + CVV (Inline on Desktop, Stacked on Mobile) -->
-            <div class="col-md-4 col-6">
-              <label class="form-label">Expiry Date</label>
-              <input
-                formControlName="expiryDate"
-                placeholder="MM/YYYY"
-                maxlength="7"
-                class="form-control"
-              />
-            </div>
-      
-            <div class="col-md-4 col-6">
-              <label class="form-label">CVV</label>
-              <input
-                formControlName="cvv"
-                placeholder="***"
-                maxlength="3"
-                type="password"
-                class="form-control"
-              />
-            </div>
-      
-            <!-- ZIP Code -->
-            <div class="col-md-4 col-12">
-              <label class="form-label">ZIP Code</label>
-              <input
-                formControlName="postal_code"
-                placeholder="12345"
-                maxlength="6"
-                class="form-control"
-              />
-            </div>
-          </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100 mt-4" [disabled]="checkoutForm.invalid" (click)="checkout()">
+              Pay Now
+            </button>
+          </form>
         </div>
       </section>
       
+      
     
     </form>
-  </main>
-  
-  <footer class="footer">
-    <button [disabled]="checkoutForm.invalid" (click)="checkout()">
-      Checkout
-    </button>
-  </footer>
+  </div>
   

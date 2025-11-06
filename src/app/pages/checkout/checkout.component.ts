@@ -107,4 +107,33 @@ export class CheckoutComponent implements OnInit {
       }
     });
   }
+
+
+  formatCardNumber(event: any) {
+    let input = event.target.value.replace(/\D/g, '');
+    input = input.match(/.{1,4}/g)?.join(' ') || '';
+    event.target.value = input;
+  }
+
+
+  formatExpiryDate(event: any): void {
+    let input = event.target.value.replace(/\D/g, ''); // remove non-digits
+
+    // Prevent month > 12 while typing
+    if (input.length >= 2) {
+      const month = parseInt(input.substring(0, 2), 10);
+      if (month > 12) {
+        input = '12' + input.substring(2); // cap month at 12
+      }
+    }
+
+    if (input.length > 2) {
+      input = input.substring(0, 2) + '/' + input.substring(2, 4);
+    }
+
+    event.target.value = input;
+    this.checkoutForm.get('expiryDate')?.setValue(input, { emitEvent: false });
+  }
+  
+
 }
