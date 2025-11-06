@@ -69,20 +69,29 @@
 
 
 <!-----basic design ------>
-<div >
+<div *ngIf="!showCheckoutIframe">
   <div>
     <h1 class="headText">BLVD ChatBot,</h1></div>
-  <!-- <header class="chat-header">
-    <h1>wellmedr.</h1>
-    <button class="start-btn">Get Started</button>
-  </header> -->
   <div class="main-chat-container">
     <div class="chat-container" >
       <div #messagesContainer class="messages">
         <div *ngFor="let msg of chatMessages" [ngClass]="msg.role">
-          <img *ngIf="msg.role=='assistant'" class="avatar" src="assets/user.svg" alt="Agent" />
+          <img *ngIf="msg.role=='assistant' && msg?.button?.type!='SHOW_PAY_BUTTON'" class="avatar" src="assets/user.svg" alt="Agent" />
           <!-- <div class="message-text">{{ msg.content }}</div> -->
-          <div class="message-text" [innerHTML]="getContent(msg.content)"></div>
+          <div *ngIf="msg?.button?.type!='SHOW_PAY_BUTTON'" class="message-text" [innerHTML]="getContent(msg.content)"></div>
+
+          <div class="text-center mt-3" *ngIf="msg?.button?.type === 'SHOW_PAY_BUTTON'">
+            <button class="btn btn-primary" (click)="goToCheckout()">
+              💳 Proceed to Checkout
+            </button>
+          </div>
+
+          <!-- <div class="text-center mt-3" >
+            <button class="btn btn-primary" (click)="goToCheckout()">
+              💳 Proceed to Checkout
+            </button>
+          </div> -->
+          
         </div>
 
 
@@ -114,6 +123,17 @@
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="showCheckoutIframe" class="iframe-wrapper">
+  <iframe
+    id="checkoutFrame"
+    [src]="safeCheckoutUrl"
+    width="100%"
+    height="600"
+    frameborder="0"
+    (load)="onIframeLoad()"
+  ></iframe>
 </div>
 
 

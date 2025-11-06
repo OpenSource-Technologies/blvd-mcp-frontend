@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../services/chat.services';
 import { HttpClient } from '@angular/common/http';
 import { marked } from 'marked';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 declare global {
   interface Window {
     Tawk_API?: any;
@@ -18,6 +19,7 @@ export class ChatComponent implements OnInit {
   public messages:any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
   mainUrl:any = 'http://localhost:3000/chat';
+  checkoutUrl:any = 'https://blvd-chatbot.ostlive.com/checkout';
   //mainUrl:any = ' https://middleware.ostlive.com/chat';
 
   //public userInput = '';
@@ -46,11 +48,15 @@ export class ChatComponent implements OnInit {
 
   isMsgSend:boolean =false;
 
+  showCheckoutIframe:boolean = false;
+  safeCheckoutUrl?: SafeResourceUrl;
+
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   constructor(
     private chatService: ChatService,
-    private http: HttpClient
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -65,6 +71,28 @@ export class ChatComponent implements OnInit {
     //     console.log("User started chatting with human agent");
     //   };
     // }
+
+    window.addEventListener('message', (event) => {
+      console.log("dsfsdfm >> ",event)
+      if (event.data?.source === 'checkout-iframe') {
+        if (event.data.type === 'CARD_TOKENIZED') {
+          this.sendTokanizeToken(event.data.token);
+          console.log('✅ Token received from checkout:', event.data.token);
+          this.showCheckoutIframe = false; // Close iframe
+        } else if (event.data.type === 'ERROR') {
+          console.error('❌ Error from checkout:', event.data.error);
+        }
+      }
+    });
+
+  }
+
+  sendTokanizeToken(data:any){
+      const response: any = this.http.post( this.mainUrl+'/receive-token',
+        { token: data }
+      ).subscribe((res:any)=>{
+        console.log("sendTokanizeToken >> ",data)
+      })
   }
 
 
@@ -236,7 +264,7 @@ export class ChatComponent implements OnInit {
         this.initTawkInline(); // initialize chat
         this.mode = 'agent';
       } else {
-        this.chatMessages.push({ role: 'assistant', content: userRole.content });
+        this.chatMessages.push({ role: 'assistant', content: userRole.content , button:userRole.frontendAction});
       }
 
       this.scrollToBottom();
@@ -245,6 +273,16 @@ export class ChatComponent implements OnInit {
       console.error('Error:', error);
       this.chatMessages.push({ role: 'bot', content: 'Error connecting to bot.' });
     }
+  }
+
+
+  goToCheckout(){
+    this.showCheckoutIframe = true;
+    this.safeCheckoutUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.checkoutUrl);
+  }
+
+  onIframeLoad(){
+    console.log("onnnn loadddd");
   }
 
   toggleChat() {

@@ -216,3 +216,20 @@
   background-color: var(--secondary-color-light);
   display: inline-block;
 }
+
+
+
+.btn-primary {
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem;
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+}
