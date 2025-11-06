@@ -5,18 +5,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent
+    ChatComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

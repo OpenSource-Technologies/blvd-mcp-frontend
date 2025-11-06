@@ -1,0 +1,81 @@
+.card-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+  
+    &:hover {
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3e50;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #007bff;
+    padding-left: 10px;
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  
+  .form-control {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease-in-out;
+  
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    }
+  }
+  
+  .error small {
+    color: #dc3545;
+    font-size: 0.85rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .card-section {
+      padding: 1.5rem;
+    }
+    .section-title {
+      font-size: 1.3rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .card-section {
+      padding: 1rem;
+    }
+    .row {
+      gap: 10px;
+    }
+    .form-label {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .form-control {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      border-left: 3px solid #007bff;
+    }
+  }
+  
