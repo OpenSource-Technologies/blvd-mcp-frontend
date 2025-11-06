@@ -1,3 +1,7 @@
+.page-content{
+  padding-bottom: 80px; 
+   margin:20px auto
+}
 .checkout-wrapper {
   align-items: center;
   background: #f7f8fa;
@@ -63,6 +67,7 @@
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.25s ease;
+  width: 100%;
 }
 
 .btn-primary:hover {
@@ -83,9 +88,10 @@
 }
 
 @media (min-width: 768px) {
-  // .checkout-wrapper{
-  //   width: 40dvw;
-  // }
+  
+  .page-content{
+    width: 40dvw;
+  }
 }
 
 
