@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { messages } from 'src/app/provider/validationformat';
 import { environment } from 'src/environments/environment';
@@ -13,12 +14,28 @@ const PAYMENT_API_BASE_URL = environment.PAYMENT_API_BASE_URL;
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  checkoutForm: FormGroup;
+  checkoutForm!: FormGroup;
   userInfo: any;
   cartDetailsSub!: Subscription;
   
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {
+    console.log("check 1")
+  }
+
+  ngOnInit(): void {
+    console.log("check 2")
+    this.route.queryParams.subscribe((params) => {
+      this.userInfo = params;
+      console.log('userInfo >> ', params);
+
+
+
+
     this.checkoutForm = this.fb.group({
       cardName: [
         '',
@@ -29,26 +46,23 @@ export class CheckoutComponent implements OnInit {
           Validators.maxLength(25),
         ],
       ],
+      email: [this.userInfo.email],
       cardNumber: ['', [Validators.required]],
       expiryDate: ['', [Validators.required]],
       cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
       postal_code: ['', [Validators.required, Validators.pattern(/^\d{4,10}$/)]],
     });
+    });
   }
 
-  ngOnInit(): void {
-    this.userInfo = history?.state;
-    console.log('userInfo >> ', this.userInfo);
-  }
+  // checkout(): void {
+  //   if (this.checkoutForm.invalid) {
+  //     this.markAllControlsTouched(this.checkoutForm);
+  //     return;
+  //   }
 
-  checkout(): void {
-    if (this.checkoutForm.invalid) {
-      this.markAllControlsTouched(this.checkoutForm);
-      return;
-    }
-
-    this.tokenizeCard(this.checkoutForm.value);
-  }
+  //   this.tokenizeCard(this.checkoutForm.value);
+  // }
 
   tokenizeCard(card: any): void {
     const tokenize_url = `${PAYMENT_API_BASE_URL}/cards/tokenize`;
@@ -77,8 +91,6 @@ export class CheckoutComponent implements OnInit {
             },
             '*' // 👈 or replace '*' with your chatbot domain for security
           );
-
-          alert('Payment token sent to chatbot!');
         } else {
           console.error('Token not found in response');
         }
@@ -110,13 +122,14 @@ export class CheckoutComponent implements OnInit {
 
 
   formatCardNumber(event: any) {
-    let input = event.target.value.replace(/\D/g, '');
-    input = input.match(/.{1,4}/g)?.join(' ') || '';
-    event.target.value = input;
+    let value = event.target.value.replace(/\D/g, '');
+    value = value.match(/.{1,4}/g)?.join(' ') ?? value;
+    event.target.value = value.trim();
+    this.checkoutForm.patchValue({ cardNumber: value }, { emitEvent: false });
   }
 
-
-  formatExpiryDate(event: any): void {
+  /** Format expiry date as MM/YY */
+  formatExpiry(event: any) {
     let input = event.target.value.replace(/\D/g, ''); // remove non-digits
 
     // Prevent month > 12 while typing
@@ -134,6 +147,15 @@ export class CheckoutComponent implements OnInit {
     event.target.value = input;
     this.checkoutForm.get('expiryDate')?.setValue(input, { emitEvent: false });
   }
-  
+
+  onSubmit() {
+
+    if (this.checkoutForm.invalid) {
+      this.markAllControlsTouched(this.checkoutForm);
+      return;
+    }
+
+    this.tokenizeCard(this.checkoutForm.value);
+  }
 
 }

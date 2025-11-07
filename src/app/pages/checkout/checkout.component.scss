@@ -1,111 +1,176 @@
-.page-content{
-  padding-bottom: 80px; 
-   margin:20px auto
-}
 .checkout-wrapper {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  background: #f7f8fa;
+  min-height: 100vh;
+  background: #f8f9fb;
+  padding: 1rem;
 }
 
-.checkout-card {
+.checkout-box {
+  width: 100%;
+  max-width: 420px;
   background: #fff;
   border-radius: 16px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  transition: 0.3s ease-in-out;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 2rem 1.75rem; // Equal left-right padding
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
-.checkout-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 1.5rem;
+/* Header */
+.checkout-header {
   text-align: center;
+  margin-bottom: 1.5rem;
+
+  .logo {
+    width: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    color: #111;
+    margin-top: 0.25rem;
+  }
 }
 
-.form-label {
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
-  color: #444;
+/* Section titles */
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  margin: 1.25rem 0 0.5rem;
 }
 
-.form-control {
+/* Form fields */
+form {
   width: 100%;
-  padding: 0.7rem 0.9rem;
+
+  .form-group {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1);
+      }
+    }
+  }
+}
+
+/* Card Input */
+.card-input {
+  display: flex;
+  align-items: center;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
-  transition: all 0.2s;
-  font-size: 0.95rem;
+  padding: 0.5rem;
+  background: #fff;
+  box-sizing: border-box;
+
+  input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.6rem;
+  }
+
+  .icons {
+    display: flex;
+    gap: 5px;
+
+    img {
+      width: 32px;
+      height: 20px;
+      object-fit: contain;
+    }
+  }
 }
 
-.form-control:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+/* Inline Expiry/CVC */
+.inline-inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.5rem;
+
+  input {
+    flex: 1;
+    border-radius: 8px;
+  }
 }
 
-.input-icon {
-  position: relative;
-}
-
-.error small {
-  color: #e11d48;
-  font-size: 0.8rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 0.9rem;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.25s ease;
+/* Pay Button */
+.pay-btn {
   width: 100%;
-}
+  padding: 0.9rem;
+  border: none;
+  border-radius: 50px;
+  background: var(--secondary-color);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1.75rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-
-  
-  .section-title {
-    font-size: 1.3rem;
+  &:hover {
+    background: var(--secondary-color);
   }
 
-  .form-control {
-    font-size: 0.9rem;
-  }
-}
-
-@media (min-width: 768px) {
-  
-  .page-content{
-    width: 40dvw;
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
   }
 }
 
+/* Small errors */
+small {
+  color: #e63946;
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 0.25rem;
+}
 
+/* Responsive Adjustments */
 @media (max-width: 480px) {
-  .checkout-wrapper {
-    padding: 1rem;
+  .checkout-box {
+    padding: 1.25rem;
+    border-radius: 14px;
   }
 
-  .checkout-card {
-    box-shadow: none;
-    border-radius: 10px;
+  input,
+  select {
+    font-size: 0.85rem;
   }
-}
 
-.row div{
- margin-bottom: 10px;
+  .pay-btn {
+    font-size: 0.95rem;
+  }
 }

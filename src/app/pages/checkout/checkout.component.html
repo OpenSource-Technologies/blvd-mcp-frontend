@@ -1,96 +1,90 @@
- 
-  <div class="page-content padding-horizontal">
+<div class="checkout-wrapper">
+  <div class="checkout-box">
+    <!-- Header -->
+    <div class="checkout-header">
+      <img src="assets/images/logo.svg" alt="Logo" class="logo" />
+      <h1>${{userInfo.amount}}</h1>
+    </div>
 
-    <form [formGroup]="checkoutForm" (ngSubmit)="checkout()" novalidate>
+    <!-- Form -->
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+      <!-- Email -->
+      <div class="form-group">
+        <label>Email</label>
+        <input
+        readonly
+          type="email"
+          formControlName="email"
+          placeholder="email@example.com"
+        />
+      </div>
 
-  
-      <!-- Credit Card Info -->
-      
-      <section class="checkout-wrapper">
-        <div class="checkout-card">
-          <h2 class="section-title">💳 Card Details</h2>
-      
-          <form [formGroup]="checkoutForm" class="card-form">
-            <div class="row">
-              <!-- Cardholder Name -->
-              <div >
-                <label class="form-label">Name on Card</label>
-                <input
-                  formControlName="cardName"
-                  type="text"
-                  minlength="3"
-                  maxlength="20"
-                  placeholder="John Doe"
-                  class="form-control"
-                />
-                <div class="error" *ngIf="checkoutForm.get('cardName')?.touched && checkoutForm.get('cardName')?.invalid">
-                  <small *ngIf="checkoutForm.get('cardName')?.hasError('required')">Name is required</small>
-                  <small *ngIf="checkoutForm.get('cardName')?.hasError('minlength')">Enter a valid name</small>
-                </div>
-              </div>
-      
-              <!-- Card Number -->
-              <div class="col-md-6 col-12">
-                <label class="form-label">Card Number</label>
-                <div class="input-icon">
-                  <input
-                    (input)="formatCardNumber($event)"
-                    formControlName="cardNumber"
-                    placeholder="4111 1111 1111 1111"
-                    maxlength="19"
-                    class="form-control"
-                  />
-                </div>
-                <div class="error" *ngIf="checkoutForm.get('cardNumber')?.touched && checkoutForm.get('cardNumber')?.invalid">
-                  <small *ngIf="checkoutForm.get('cardNumber')?.hasError('required')">Card number is required</small>
-                </div>
-              </div>
-      
-              <!-- Expiry Date -->
-              <div class="col-md-4 col-6">
-                <label class="form-label">Expiry Date</label>
-                <input
-                  formControlName="expiryDate"
-                  placeholder="MM/YY"
-                  maxlength="5"
-                  class="form-control"
-                  (input)="formatExpiryDate($event)"
-                />
-              </div>
-      
-              <!-- CVV -->
-              <div class="col-md-4 col-6">
-                <label class="form-label">CVV</label>
-                <input
-                  formControlName="cvv"
-                  placeholder="***"
-                  maxlength="3"
-                  type="password"
-                  class="form-control"
-                />
-              </div>
-      
-              <!-- ZIP Code -->
-              <div class="col-md-4 col-12">
-                <label class="form-label">ZIP Code</label>
-                <input
-                  formControlName="postal_code"
-                  placeholder="12345"
-                  maxlength="6"
-                  class="form-control"
-                />
-              </div>
-            </div>
-      
-            <button type="submit" class="btn btn-primary btn-lg w-100 mt-4" [disabled]="checkoutForm.invalid" (click)="checkout()">
-              Checkout
-            </button>
-          </form>
+      <h4 class="section-title">Payment method</h4>
+
+      <!-- Card number -->
+      <div class="form-group">
+        <label>Card information</label>
+        <div class="card-input">
+          <input
+            type="text"
+            formControlName="cardNumber"
+            placeholder="4111 1111 1111 1111"
+            maxlength="19"
+            (input)="formatCardNumber($event)"
+          />
+          <div class="icons">
+            <img src="assets/images/visa.png" alt="Visa" />
+            <img src="assets/images/mastercard.png" alt="Mastercard" />
+            <img src="assets/images/amex.png" alt="Amex" />
+          </div>
         </div>
-      </section>
-      
-      
-    
+
+        <div class="inline-inputs">
+          <input
+            type="text"
+            formControlName="expiryDate"
+            placeholder="MM/YY"
+            maxlength="5"
+            (input)="formatExpiry($event)"
+          />
+          <input
+            type="password"
+            formControlName="cvv"
+            maxlength="3"
+            placeholder="CVV"
+          />
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Cardholder name</label>
+        <input
+          type="text"
+          formControlName="cardName"
+          placeholder="Full name on card"
+        />
+      </div>
+
+      <!-- ZIP -->
+      <div class="form-group">
+        <label>ZIP Code</label>
+        <input
+          type="text"
+          formControlName="postal_code"
+          placeholder="12345"
+          maxlength="6"
+        />
+      </div>
+
+      <!-- Pay button -->
+      <button
+        type="submit"
+        class="pay-btn"
+        [disabled]="checkoutForm.invalid"
+      >
+        Pay ${{userInfo.amount}}
+      </button>
     </form>
   </div>
-  
+</div>
