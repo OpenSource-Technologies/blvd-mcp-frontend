@@ -55,15 +55,6 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  // checkout(): void {
-  //   if (this.checkoutForm.invalid) {
-  //     this.markAllControlsTouched(this.checkoutForm);
-  //     return;
-  //   }
-
-  //   this.tokenizeCard(this.checkoutForm.value);
-  // }
-
   tokenizeCard(card: any): void {
     const tokenize_url = `${PAYMENT_API_BASE_URL}/cards/tokenize`;
     const payload = {
