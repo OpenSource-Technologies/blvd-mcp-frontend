@@ -276,8 +276,10 @@ export class ChatComponent implements OnInit {
   }
 
 
-  goToCheckout(){
+  goToCheckout(url:any){
     this.showCheckoutIframe = true;
+    this.checkoutUrl = url; //for dynamic
+   // this.checkoutUrl = this.checkoutUrl+'?email=tes2t@gmail.com&amount=50' //for static
     this.safeCheckoutUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.checkoutUrl);
   }
 
