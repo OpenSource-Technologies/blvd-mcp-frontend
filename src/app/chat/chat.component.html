@@ -81,10 +81,16 @@
           <div *ngIf="msg?.button?.type!='SHOW_PAY_BUTTON'" class="message-text" [innerHTML]="getContent(msg.content)"></div>
 
           <div class="text-center mt-3" *ngIf="msg?.button?.type === 'SHOW_PAY_BUTTON'">
-            <button class="btn btn-primary" (click)="goToCheckout(msg?.button?.checkoutUrl)">
-              💳 Proceed to Checkout
-            </button>
+            <!-- <a href="#" (click)="goToCheckout(msg?.button?.checkoutUrl)">
+              💳 Proceed to Payment
+            </a> -->
+
+            <a href="#" class="checkout-link" (click)="goToCheckout(msg?.button?.checkoutUrl)">
+              <span class="hand">👉</span>
+              <span class="text">Click Here</span>
+            </a> To Payment
           </div>
+
 
           <!-- <div class="text-center mt-3" >
             <button class="btn btn-primary" (click)="goToCheckout(msg?.button?.checkoutUrl)">
