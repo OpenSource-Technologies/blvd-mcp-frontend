@@ -1,5 +1,5 @@
 <div class="checkout-wrapper">
-  <div class="checkout-box">
+  <div *ngIf="!isTokenExpired" class="checkout-box">
     <!-- Header -->
     <div class="checkout-header">
       <img src="assets/images/logo.svg" alt="Logo" class="logo" />
@@ -86,5 +86,9 @@
         Pay ${{userInfo.amount}}
       </button>
     </form>
+  </div>
+  <div *ngIf="isTokenExpired">
+    URL is invalid or expired <br />
+    <a (click)="backTo()">Back</a>
   </div>
 </div>

@@ -7,16 +7,18 @@ import { messages } from 'src/app/provider/validationformat';
 import { environment } from 'src/environments/environment';
 
 const PAYMENT_API_BASE_URL = environment.PAYMENT_API_BASE_URL;
-
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
+
 export class CheckoutComponent implements OnInit {
   checkoutForm!: FormGroup;
   userInfo: any;
   cartDetailsSub!: Subscription;
+  isTokenExpired:boolean = false;
+  usedTokens:any;
   
 
   constructor(
@@ -33,25 +35,42 @@ export class CheckoutComponent implements OnInit {
       this.userInfo = params;
       console.log('userInfo >> ', params);
 
+      this.usedTokens = localStorage.getItem("sessionToken") ?? '';
+      console.log("usedTokens > ",this.usedTokens)
 
+      if (!this.userInfo.token) {
+        this.isTokenExpired = true;
+       // return { error: "Invalid checkout link" };
+      }else
+      if (this.usedTokens==this.userInfo.token) {
+        this.isTokenExpired = true;
+        //return { error: "This link has already been used" };
+      }else{
 
+      localStorage.setItem("sessionToken",this.userInfo.token);
+      // Mark token as used
+      //  usedTokens.add(this.userInfo.token);
 
-    this.checkoutForm = this.fb.group({
-      cardName: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(messages.validation.nameRegex),
-          Validators.minLength(3),
-          Validators.maxLength(25),
-        ],
-      ],
-      email: [this.userInfo.email],
-      cardNumber: ['', [Validators.required]],
-      expiryDate: ['', [Validators.required]],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
-      postal_code: ['', [Validators.required, Validators.pattern(/^\d{4,10}$/)]],
-    });
+        this.checkoutForm = this.fb.group({
+          cardName: [
+            '',
+            [
+              Validators.required,
+              Validators.pattern(messages.validation.nameRegex),
+              Validators.minLength(3),
+              Validators.maxLength(25),
+            ],
+          ],
+          email: [this.userInfo.email],
+          cardNumber: ['', [Validators.required]],
+          expiryDate: ['', [Validators.required]],
+          cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+          postal_code: ['', [Validators.required, Validators.pattern(/^\d{4,10}$/)]],
+        });
+      }
+    
+
+    
     });
   }
 
@@ -147,6 +166,16 @@ export class CheckoutComponent implements OnInit {
     }
 
     this.tokenizeCard(this.checkoutForm.value);
+  }
+
+  backTo(){
+    window.parent.postMessage(
+      {
+        source: 'checkout-iframe',
+        type: 'CARD_TOKENIZED',
+      },
+      '*' // 👈 or replace '*' with your chatbot domain for security
+    );
   }
 
 }
