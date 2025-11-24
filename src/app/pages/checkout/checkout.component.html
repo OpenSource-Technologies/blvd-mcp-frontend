@@ -54,6 +54,13 @@
             placeholder="CVV"
           />
         </div>
+
+        <small class="error" *ngIf="
+        checkoutForm.get('expiryDate')?.touched &&
+        checkoutForm.get('expiryDate')?.errors?.['expired']
+      ">
+        Your card has been expired. please use another with future expiry date.
+              </small>
       </div>
 
       <!-- Name -->
@@ -64,6 +71,13 @@
           formControlName="cardName"
           placeholder="Full name on card"
         />
+
+        <small class="error" *ngIf="
+        checkoutForm.get('cardName')?.touched &&
+        checkoutForm.get('cardName')?.errors?.['pattern']
+      ">
+        Please enter valid full name
+              </small>
       </div>
 
       <!-- ZIP -->
@@ -87,8 +101,11 @@
       </button>
     </form>
   </div>
-  <div *ngIf="isTokenExpired">
-    URL is invalid or expired <br />
-    <a (click)="backTo()">Back</a>
+  <div *ngIf="isTokenExpired" class="checkout-box-expire">
+    <div>
+      This link has been expired.
+    </div>
+    <br />
+    <a href="#" (click)="backTo()">Go to the main page</a>
   </div>
 </div>

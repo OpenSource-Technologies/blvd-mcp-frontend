@@ -55,8 +55,11 @@ export class ChatComponent implements OnInit {
       console.log("dsfsdfm >> ",event)
       if (event.data?.source === 'checkout-iframe') {
         if (event.data.type === 'CARD_TOKENIZED') {
-          this.sendTokanizeToken(event.data.token);
-          console.log('✅ Token received from checkout:', event.data.token);
+          if(event.data.token !="back"){
+            this.sendTokanizeToken(event.data.token);
+            console.log('✅ Token received from checkout:', event.data.token);
+          }
+          
           this.showCheckoutIframe = false; // Close iframe
         } else if (event.data.type === 'ERROR') {
           console.error('❌ Error from checkout:', event.data.error);

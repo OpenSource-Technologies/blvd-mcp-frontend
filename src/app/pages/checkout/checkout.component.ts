@@ -107,14 +107,15 @@ export class CheckoutComponent implements OnInit {
       },
       error: (err) => {
         console.error('Tokenization failed:', err);
-        window.parent.postMessage(
-          {
-            source: 'checkout-iframe',
-            type: 'ERROR',
-            error: err.message || 'Tokenization failed',
-          },
-          '*'
-        );
+        alert("please enter your valid payment details.")
+        // window.parent.postMessage(
+        //   {
+        //     source: 'checkout-iframe',
+        //     type: 'ERROR',
+        //     error: err.message || 'Tokenization failed',
+        //   },
+        //   '*'
+        // );
       },
     });
   }
@@ -139,24 +140,76 @@ export class CheckoutComponent implements OnInit {
   }
 
   /** Format expiry date as MM/YY */
-  formatExpiry(event: any) {
-    let input = event.target.value.replace(/\D/g, ''); // remove non-digits
+  // formatExpiry(event: any) {
+  //   let input = event.target.value.replace(/\D/g, ''); // remove non-digits
 
-    // Prevent month > 12 while typing
+  //   // Prevent month > 12 while typing
+  //   if (input.length >= 2) {
+  //     const month = parseInt(input.substring(0, 2), 10);
+  //     if (month > 12) {
+  //       input = '12' + input.substring(2); // cap month at 12
+  //     }
+  //   }
+
+  //   if (input.length > 2) {
+  //     input = input.substring(0, 2) + '/' + input.substring(2, 4);
+  //   }
+
+  //   event.target.value = input;
+  //   this.checkoutForm.get('expiryDate')?.setValue(input, { emitEvent: false });
+  // }
+
+  formatExpiry(event: any) {
+    let input = event.target.value.replace(/\D/g, ''); // Remove non-digits
+  
+    // Prevent month > 12
     if (input.length >= 2) {
       const month = parseInt(input.substring(0, 2), 10);
       if (month > 12) {
-        input = '12' + input.substring(2); // cap month at 12
+        input = '12' + input.substring(2);
       }
     }
-
+  
+    console.log("input inn >> ",input)
+    // Add slash
     if (input.length > 2) {
       input = input.substring(0, 2) + '/' + input.substring(2, 4);
     }
-
+  
     event.target.value = input;
     this.checkoutForm.get('expiryDate')?.setValue(input, { emitEvent: false });
+    console.log("valueeee >> ",this.checkoutForm.value)
+  
+    // ---------------------------
+    // FUTURE YEAR VALIDATION
+    // ---------------------------
+    if (input.length === 5) {
+      const [mm, yy] = input.split('/').map(Number);
+  
+      const currentYear = new Date().getFullYear() % 100;  // YY format
+      const currentMonth = new Date().getMonth() + 1;
+
+      console.log("currentYear >> ",currentYear);
+      console.log("currentMonth >> ",currentMonth)
+  
+      let isValid = false;
+  
+      if (yy > currentYear) {
+        isValid = true;
+      } else if (yy === currentYear && mm >= currentMonth) {
+        isValid = true;
+      }
+  
+      if (!isValid) {
+        this.checkoutForm.get('expiryDate')?.setErrors({ expired: true });
+      } else {
+        this.checkoutForm.get('expiryDate')?.setErrors(null);
+      }
+    }else{
+      this.checkoutForm.get('expiryDate')?.setErrors({ expired: true });
+    }
   }
+  
 
   onSubmit() {
 
@@ -173,6 +226,8 @@ export class CheckoutComponent implements OnInit {
       {
         source: 'checkout-iframe',
         type: 'CARD_TOKENIZED',
+        token: "back",
+
       },
       '*' // 👈 or replace '*' with your chatbot domain for security
     );
