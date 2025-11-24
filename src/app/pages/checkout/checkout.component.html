@@ -102,10 +102,21 @@
     </form>
   </div>
   <div *ngIf="isTokenExpired" class="checkout-box-expire">
-    <div>
-      This link has been expired.
+    <div class="invalid-wrapper">
+      <div class="text-section">
+        <h2>Link is not valid any more</h2>
+        <p>Oops! This URL is not valid anymore</p>
+    
+        <button class="home-btn" (click)="backTo()">
+          Go to home page
+        </button>
+      </div>
+    
+      <div class="illustration-section">
+        <img src="/assets/hourglass.png" alt="Link expired illustration" />
+      </div>
     </div>
-    <br />
-    <a href="#" (click)="backTo()">Go to the main page</a>
+
+    
   </div>
 </div>
