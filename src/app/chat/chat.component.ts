@@ -19,8 +19,12 @@ export class ChatComponent implements OnInit {
 
   public messages: any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
-  mainUrl: string = 'http://localhost:3000/chat';
-  checkoutUrl: string = 'https://blvd-chatbot.ostlive.com/checkout';
+  // mainUrl: string = 'http://localhost:3000/chat';
+  // checkoutUrl: string = 'https://blvd-chatbot.ostlive.com/checkout';
+
+  mainUrl:any = 'http://localhost:3000/chat';
+  checkoutUrl:any = 'https://blvd-chatbot.ostlive.com/checkout';
+  //mainUrl:any = ' https://middleware.ostlive.com/chat';
 
   showBotChat = true;
   showHumanChat = false;

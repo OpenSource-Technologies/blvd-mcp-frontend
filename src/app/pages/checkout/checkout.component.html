@@ -41,7 +41,8 @@
 
 
         <small class="error" *ngIf="
-        checkoutForm.get('cardNumber')?.touched
+        checkoutForm.get('cardNumber')?.touched &&
+        checkoutForm.get('cardNumber')?.errors?.['invalidCard']
       ">
         Please enter a valid Card Number.
       </small>

@@ -135,9 +135,23 @@ export class CheckoutComponent implements OnInit {
   formatCardNumber(event: any) {
     let value = event.target.value.replace(/\D/g, '');
     value = value.match(/.{1,4}/g)?.join(' ') ?? value;
+  
     event.target.value = value.trim();
+  
     this.checkoutForm.patchValue({ cardNumber: value }, { emitEvent: false });
+  
+    // Basic card number validation (Luhn or length check)
+    const numericValue = value.replace(/\s/g, '');
+  
+    const isValid = numericValue.length >= 16; // You can replace with Luhn if needed
+  
+    if (!isValid) {
+      this.checkoutForm.get('cardNumber')?.setErrors({ invalidCard: true });
+    } else {
+      this.checkoutForm.get('cardNumber')?.setErrors(null);
+    }
   }
+  
 
   /** Format expiry date as MM/YY */
   // formatExpiry(event: any) {
