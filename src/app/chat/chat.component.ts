@@ -3,6 +3,7 @@ import { ChatService } from '../services/chat.services';
 import { HttpClient } from '@angular/common/http';
 import { marked } from 'marked';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 declare global {
   interface Window {
     Tawk_API?: any;
@@ -16,30 +17,26 @@ declare global {
 })
 export class ChatComponent implements OnInit {
 
-  public messages:any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
+  public messages: any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
-  //mainUrl:any = 'http://localhost:3000/chat';
-  checkoutUrl:any = 'https://blvd-chatbot.ostlive.com/checkout';
-  mainUrl:any = ' https://middleware.ostlive.com/chat';
+  mainUrl: string = 'http://localhost:3000/chat';
+  checkoutUrl: string = 'https://blvd-chatbot.ostlive.com/checkout';
 
   showBotChat = true;
   showHumanChat = false;
 
   isLoading = false;
-
   userInput = '';
-  mode: 'bot' | 'agent' = 'bot'; // 👈 track current mode
-
+  mode: 'bot' | 'agent' = 'bot';
   isChatOpen = false;
 
-  //for last ui
-
   chatMessages: any[] = [];
+  isMsgSend: boolean = false;
 
-  isMsgSend:boolean =false;
-
-  showCheckoutIframe:boolean = false;
+  showCheckoutIframe: boolean = false;
   safeCheckoutUrl?: SafeResourceUrl;
+
+  sessionId!: string;
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
@@ -47,74 +44,70 @@ export class ChatComponent implements OnInit {
     private chatService: ChatService,
     private http: HttpClient,
     private sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    // Generate a new session ID on every page load
+    this.sessionId = this.generateSessionId();
 
+    // Listen for messages from checkout iframe
     window.addEventListener('message', (event) => {
-      console.log("dsfsdfm >> ",event)
       if (event.data?.source === 'checkout-iframe') {
-        if (event.data.type === 'CARD_TOKENIZED') {
-          if(event.data.token !="back"){
-            this.sendTokanizeToken(event.data.token);
-            console.log('✅ Token received from checkout:', event.data.token);
-          }
-          
-          this.showCheckoutIframe = false; // Close iframe
+        if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
+          this.sendTokanizeToken(event.data.token);
+          this.showCheckoutIframe = false;
         } else if (event.data.type === 'ERROR') {
           console.error('❌ Error from checkout:', event.data.error);
         }
       }
     });
-
   }
 
-  sendTokanizeToken(data: any) {
-    this.http.post(this.mainUrl + '/receive-token', { token: data })
+  /** Generate a fresh session ID */
+  private generateSessionId(): string {
+    return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+  }
+
+  /** Send token to backend and push bot reply */
+  sendTokanizeToken(token: string) {
+    this.http.post(this.mainUrl + '/receive-token', { token, sessionId: this.sessionId })
       .subscribe({
         next: (res: any) => {
-          console.log("sendTokanizeToken >> ", res);
-  
-          // Push backend reply to chat UI
           if (res?.reply?.content) {
             this.chatMessages.push({ role: 'assistant', content: res.reply.content });
           } else if (res?.response) {
             this.chatMessages.push({ role: 'assistant', content: res.response });
           }
-  
-          this.scrollToBottom(); // optional: scroll chat to bottom
+          this.scrollToBottom();
         },
-        error: (err) => {
-          console.error("sendTokanizeToken failed >>", err);
-        }
+        error: (err) => console.error("sendTokanizeToken failed >>", err)
       });
   }
 
-  /**for basic ui start*/
-
+  /** Send user message */
   async sendMessage() {
-    if(!this.isMsgSend){
-      this.isMsgSend = true;
-      const message = this.userInput.trim();
-      console.log("message >> ",message)
-      if (!message) return;
-      this.chatMessages.push({ role: 'user', content: message });
-      this.userInput = '';
-      this.isLoading = true;
-      console.log("mode >> ",this.mode);
+    if (this.isMsgSend) return;
+    this.isMsgSend = true;
 
-      if (this.mode === 'bot') {
-        await this.handleBotMessage(message);
-        this.isMsgSend = false;
-      } else {
-        this.handleHumanMessage(message);
-        this.isMsgSend = false;
-      }
+    const message = this.userInput.trim();
+    if (!message) return;
+
+    this.chatMessages.push({ role: 'user', content: message });
+    this.userInput = '';
+    this.isLoading = true;
+
+    if (this.mode === 'bot') {
+      await this.handleBotMessage(message);
+    } else {
+      this.handleHumanMessage(message);
     }
+
+    this.isMsgSend = false;
   }
 
+  /** Scroll chat container to bottom */
   ngAfterViewChecked() {
-    this.scrollToBottom(); // 👈 will scroll every time view updates
+    this.scrollToBottom();
   }
 
   private scrollToBottom(): void {
@@ -126,25 +119,22 @@ export class ChatComponent implements OnInit {
     }
   }
 
-
+  /** Handle bot messages */
   private async handleBotMessage(message: string) {
     try {
-      const response: any = await this.http.post(
-       // 'http://localhost:5678/webhook/ca7ad99c-d1cd-4237-b95d-5182c70a7d14/chat',
-       this.mainUrl,
-        { chatInput: message }
-      ).toPromise();
+      const response: any = await this.http.post(this.mainUrl, {
+        chatInput: message,
+        sessionId: this.sessionId
+      }).toPromise();
 
-      console.log('Bot response:', response);
       this.isLoading = false;
-      let userRole = response.reply;
+      const userRole = response.reply;
 
-      // Check if backend says "agent"
       if (userRole.role === 'humanAgent') {
-        this.chatMessages.push({ role: 'user', content: 'Connecting you to a human agent...' });// initialize chat
+        this.chatMessages.push({ role: 'user', content: 'Connecting you to a human agent...' });
         this.mode = 'agent';
       } else {
-        this.chatMessages.push({ role: 'assistant', content: userRole.content , button:userRole.frontendAction});
+        this.chatMessages.push({ role: 'assistant', content: userRole.content, button: userRole.frontendAction });
       }
 
       this.scrollToBottom();
@@ -155,40 +145,33 @@ export class ChatComponent implements OnInit {
     }
   }
 
-
-  goToCheckout(url:any){
+  /** Open checkout iframe */
+  goToCheckout(url: string) {
     this.showCheckoutIframe = true;
-    this.checkoutUrl = url; //for dynamic
-   // this.checkoutUrl = this.checkoutUrl+'?email=tes2t@gmail.com&amount=50' //for static
+    this.checkoutUrl = url;
     this.safeCheckoutUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.checkoutUrl);
   }
 
-  onIframeLoad(){
-    console.log("onnnn loadddd");
+  onIframeLoad() {
+    console.log("Iframe loaded");
   }
 
   toggleChat() {
     this.isChatOpen = !this.isChatOpen;
   }
 
+  /** Send human message via Tawk API */
   private handleHumanMessage(message: string) {
-    console.log("window >> ",window)
     if (window.Tawk_API && window.Tawk_API.addEvent) {
-      // window.Tawk_API.addMessageToChat({
-      //   text: message,
-      //   type: 'visitor'
-      // });
-
-      console.log("innnn")
       window.Tawk_API.addEvent('chat-message', { text: message });
-
     } else {
       console.warn('Tawk_API not ready');
     }
   }
 
-  getContent(data:any){
+  /** Render markdown content */
+  getContent(data: any) {
     return marked(data);
   }
 
- }
+}
