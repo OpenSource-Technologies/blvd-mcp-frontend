@@ -39,28 +39,54 @@
           </div>
         </div>
 
-        <div class="inline-inputs">
-          <input
-            type="text"
-            formControlName="expiryDate"
-            placeholder="MM/YY"
-            maxlength="5"
-            (input)="formatExpiry($event)"
-          />
-          <input
-            type="password"
-            formControlName="cvv"
-            maxlength="3"
-            placeholder="CVV"
-          />
-        </div>
 
         <small class="error" *ngIf="
-        checkoutForm.get('expiryDate')?.touched &&
-        checkoutForm.get('expiryDate')?.errors?.['expired']
+        checkoutForm.get('cardNumber')?.touched
       ">
-        Your card has been expired. please use another with future expiry date.
-              </small>
+        Please enter a valid Card Number.
+      </small>
+
+
+        <div class="inline-inputs">
+
+          <!-- Expiry Date Input -->
+          <div class="input-wrapper">
+            <input
+              type="text"
+              formControlName="expiryDate"
+              placeholder="MM/YY"
+              maxlength="5"
+              (input)="formatExpiry($event)"
+            />
+        
+            <small class="error" *ngIf="
+              checkoutForm.get('expiryDate')?.touched &&
+              checkoutForm.get('expiryDate')?.errors?.['expired']
+            ">
+              Your card has expired. Please use another card with a future expiry date.
+            </small>
+          </div>
+        
+          <!-- CVV Input -->
+          <div class="input-wrapper">
+            <input
+              type="password"
+              formControlName="cvv"
+              maxlength="3"
+              placeholder="CVV"
+            />
+        
+            <small class="error" *ngIf="
+              checkoutForm.get('cvv')?.touched &&
+              checkoutForm.get('cvv')?.errors?.['pattern']
+            ">
+              Please enter a valid CVV.
+            </small>
+          </div>
+        
+        </div>
+
+        
       </div>
 
       <!-- Name -->
@@ -90,6 +116,13 @@
           maxlength="6"
         />
       </div>
+      <small class="error" *ngIf="
+        checkoutForm.get('postal_code')?.touched &&
+        checkoutForm.get('postal_code')?.errors?.['pattern']
+      ">
+        Please enter valid zipcode.
+              </small>
+
 
       <!-- Pay button -->
       <button
