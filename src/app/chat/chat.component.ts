@@ -57,11 +57,21 @@ export class ChatComponent implements OnInit {
     // Listen for messages from checkout iframe
     window.addEventListener('message', (event) => {
       if (event.data?.source === 'checkout-iframe') {
-        if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
-          this.sendTokanizeToken(event.data.token);
-          this.showCheckoutIframe = false;
-        } else if (event.data.type === 'ERROR') {
-          console.error('❌ Error from checkout:', event.data.error);
+
+
+        if (event.data.type === 'CARD_TOKENIZED') {
+          if(event.data.token !="back"){
+            this.sendTokanizeToken(event.data.token);
+            console.log('✅ Token received from checkout:', event.data.token);
+          }
+          
+          this.showCheckoutIframe = false; // Close iframe
+          if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
+            this.sendTokanizeToken(event.data.token);
+            this.showCheckoutIframe = false;
+          } else if (event.data.type === 'ERROR') {
+            console.error('❌ Error from checkout:', event.data.error);
+          }
         }
       }
     });
