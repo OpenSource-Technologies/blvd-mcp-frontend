@@ -66,12 +66,12 @@ export class ChatComponent implements OnInit {
           }
           
           this.showCheckoutIframe = false; // Close iframe
-          if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
-            this.sendTokanizeToken(event.data.token);
-            this.showCheckoutIframe = false;
-          } else if (event.data.type === 'ERROR') {
-            console.error('❌ Error from checkout:', event.data.error);
-          }
+          // if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
+          //   this.sendTokanizeToken(event.data.token);
+          //   this.showCheckoutIframe = false;
+          // } else if (event.data.type === 'ERROR') {
+          //   console.error('❌ Error from checkout:', event.data.error);
+          // }
         }
       }
     });
