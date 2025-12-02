@@ -26,30 +26,22 @@ export class CheckoutComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute
   ) {
-    console.log("check 1")
   }
 
   ngOnInit(): void {
-    console.log("check 2")
     this.route.queryParams.subscribe((params) => {
       this.userInfo = params;
-      console.log('userInfo >> ', params);
-
-      this.usedTokens = localStorage.getItem("sessionToken") ?? '';
-      console.log("usedTokens > ",this.usedTokens)
+      this.usedTokens = JSON.parse(localStorage.getItem("sessionToken") ?? '[]');
 
       if (!this.userInfo.token) {
         this.isTokenExpired = true;
-       // return { error: "Invalid checkout link" };
       }else
-      if (this.usedTokens==this.userInfo.token) {
+      if (this.usedTokens.includes(this.userInfo.token)) {
         this.isTokenExpired = true;
-        //return { error: "This link has already been used" };
       }else{
 
-      localStorage.setItem("sessionToken",this.userInfo.token);
-      // Mark token as used
-      //  usedTokens.add(this.userInfo.token);
+         let newTokens = [...this.usedTokens, this.userInfo.token];
+         localStorage.setItem("sessionToken", JSON.stringify(newTokens));
 
         this.checkoutForm = this.fb.group({
           cardName: [
@@ -183,8 +175,7 @@ export class CheckoutComponent implements OnInit {
         input = '12' + input.substring(2);
       }
     }
-  
-    console.log("input inn >> ",input)
+
     // Add slash
     if (input.length > 2) {
       input = input.substring(0, 2) + '/' + input.substring(2, 4);
@@ -192,7 +183,6 @@ export class CheckoutComponent implements OnInit {
   
     event.target.value = input;
     this.checkoutForm.get('expiryDate')?.setValue(input, { emitEvent: false });
-    console.log("valueeee >> ",this.checkoutForm.value)
   
     // ---------------------------
     // FUTURE YEAR VALIDATION
@@ -202,9 +192,6 @@ export class CheckoutComponent implements OnInit {
   
       const currentYear = new Date().getFullYear() % 100;  // YY format
       const currentMonth = new Date().getMonth() + 1;
-
-      console.log("currentYear >> ",currentYear);
-      console.log("currentMonth >> ",currentMonth)
   
       let isValid = false;
   

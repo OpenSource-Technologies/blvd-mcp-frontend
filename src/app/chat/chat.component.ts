@@ -53,6 +53,7 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     // Generate a new session ID on every page load
     this.sessionId = this.generateSessionId();
+    localStorage.setItem("sessionToken",'[]');
 
     // Listen for messages from checkout iframe
     window.addEventListener('message', (event) => {
@@ -66,12 +67,6 @@ export class ChatComponent implements OnInit {
           }
           
           this.showCheckoutIframe = false; // Close iframe
-          // if (event.data.type === 'CARD_TOKENIZED' && event.data.token !== "back") {
-          //   this.sendTokanizeToken(event.data.token);
-          //   this.showCheckoutIframe = false;
-          // } else if (event.data.type === 'ERROR') {
-          //   console.error('❌ Error from checkout:', event.data.error);
-          // }
         }
       }
     });
