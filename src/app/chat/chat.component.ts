@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit {
   // mainUrl: string = 'http://localhost:3000/chat';
   // checkoutUrl: string = 'https://blvd-chatbot.ostlive.com/checkout';
 
-  mainUrl:any = 'http://localhost:3000/chat';
+  mainUrl:any = 'http://localhost:3010/chat';
   checkoutUrl:any = 'https://blvd-chatbot.ostlive.com/checkout';
   //mainUrl:any = ' https://middleware.ostlive.com/chat';
 
