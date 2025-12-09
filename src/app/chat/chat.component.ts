@@ -41,6 +41,7 @@ export class ChatComponent implements OnInit {
   safeCheckoutUrl?: SafeResourceUrl;
 
   sessionId!: string;
+  uUId!: any;
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
@@ -74,12 +75,21 @@ export class ChatComponent implements OnInit {
 
   /** Generate a fresh session ID */
   private generateSessionId(): string {
-    return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+    let session = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+    if(localStorage.getItem("uUId")){
+      this.uUId = localStorage.getItem("uUId")
+    }else{
+      this.uUId = session;
+      localStorage.setItem("uUId",this.uUId);
+    }
+
+    return session;
+    //return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2);
   }
 
   /** Send token to backend and push bot reply */
   sendTokanizeToken(token: string) {
-    this.http.post(this.mainUrl + '/receive-token', { token, sessionId: this.sessionId })
+    this.http.post(this.mainUrl + '/receive-token', { token, sessionId: this.sessionId , uuid: this.uUId})
       .subscribe({
         next: (res: any) => {
           if (res?.reply?.content) {
@@ -133,7 +143,8 @@ export class ChatComponent implements OnInit {
     try {
       const response: any = await this.http.post(this.mainUrl, {
         chatInput: message,
-        sessionId: this.sessionId
+        sessionId: this.sessionId,
+        uuid: this.uUId
       }).toPromise();
 
       this.isLoading = false;
