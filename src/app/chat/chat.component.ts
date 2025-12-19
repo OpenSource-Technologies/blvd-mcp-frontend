@@ -3,6 +3,7 @@ import { ChatService } from '../services/chat.services';
 import { HttpClient } from '@angular/common/http';
 import { marked } from 'marked';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment.prod';
 
 declare global {
   interface Window {
@@ -19,12 +20,8 @@ export class ChatComponent implements OnInit {
 
   public messages: any = [{ role: 'assistant', content: 'Hi! How can I help you?' }];
 
-  // mainUrl: string = 'http://localhost:3000/chat';
-  // checkoutUrl: string = 'https://blvd-chatbot.ostlive.com/checkout';
-
-  mainUrl:any = 'http://localhost:3010/chat';
-  checkoutUrl:any = 'https://blvd-chatbot.ostlive.com/checkout';
-  //mainUrl:any = ' https://middleware.ostlive.com/chat';
+  mainUrl:any = environment.MAIN_URL;
+  checkoutUrl:any = environment.CHECKOUT_URL;
 
   showBotChat = true;
   showHumanChat = false;
@@ -42,6 +39,8 @@ export class ChatComponent implements OnInit {
 
   sessionId!: string;
   uUId!: any;
+  isWelcomeOptionHide:boolean = false;
+  promptDeafaultMsg:any = [];
 
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
@@ -55,6 +54,24 @@ export class ChatComponent implements OnInit {
     // Generate a new session ID on every page load
     this.sessionId = this.generateSessionId();
     localStorage.setItem("sessionToken",'[]');
+
+
+
+    this.promptDeafaultMsg.push({
+      role: 'agent',
+      content: 'Hello! Please let me know how can I help you with: ',
+      defaultPrompt: true,
+      options: [
+        { label: '📅 Book an Appointment', value: 'Book an Appointment' },
+        { label: '💳 Buy a Membership', value: 'Buy a Membership' },
+        { label: '🎁 Buy a Gift Card', value: 'Buy a Gift Card' }
+      ]
+    });
+
+    this.userInput = '';
+    //this.isLoading = true;
+
+   // this.handleBotMessage('');
 
     // Listen for messages from checkout iframe
     window.addEventListener('message', (event) => {
@@ -72,6 +89,14 @@ export class ChatComponent implements OnInit {
       }
     });
   }
+
+  onOptionSelect(option: { label: string; value: string }, msg:string) {
+   
+    this.isWelcomeOptionHide = true;
+    this.userInput = option.value;
+    this.sendMessage();
+  }
+  
 
   /** Generate a fresh session ID */
   private generateSessionId(): string {
@@ -155,6 +180,11 @@ export class ChatComponent implements OnInit {
         this.mode = 'agent';
       } else {
         this.chatMessages.push({ role: 'assistant', content: userRole.content, button: userRole.frontendAction });
+        // const summary = this.http.post(this.mainUrl + '/prompt-suggestions', {  userContent: userRole.content}).subscribe((res:any)=>{
+
+        //   console.log("summarysummary  >> ",res)
+        // })
+       // this.userInput = "i would like to"
       }
 
       this.scrollToBottom();

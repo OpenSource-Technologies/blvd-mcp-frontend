@@ -5,7 +5,24 @@
   <div class="main-chat-container">
     <div class="chat-container" >
       <div #messagesContainer class="messages">
+        <div *ngFor="let msg of promptDeafaultMsg" [ngClass]="msg.role">
+          
+          <img *ngIf="!isWelcomeOptionHide" class="avatar" src="assets/user.svg" alt="Agent" />
+          <div *ngIf="!isWelcomeOptionHide" class="message-text" [innerHTML]="getContent(msg.content)"></div>
+
+          <div class="options" *ngIf="msg.options?.length && !isWelcomeOptionHide">
+            <button
+              *ngFor="let opt of msg.options"
+              (click)="onOptionSelect(opt, msg)"
+              class="option-btn">
+              {{ opt.label }}
+            </button>
+          </div>
+
+          
+        </div>
         <div *ngFor="let msg of chatMessages" [ngClass]="msg.role">
+          
           <img *ngIf="msg.role=='assistant' && msg?.button?.type!='SHOW_PAY_BUTTON'" class="avatar" src="assets/user.svg" alt="Agent" />
           <div *ngIf="msg?.button?.type!='SHOW_PAY_BUTTON'" class="message-text" [innerHTML]="getContent(msg.content)"></div>
 

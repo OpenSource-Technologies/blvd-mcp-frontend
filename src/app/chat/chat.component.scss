@@ -237,3 +237,25 @@
 #checkoutFrame{
   height: 100dvh;
 }
+
+
+
+
+.options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.option-btn {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.option-btn:hover {
+  background: #f3f3f3;
+}
