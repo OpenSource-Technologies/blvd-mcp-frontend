@@ -1,6 +1,9 @@
 <div class="checkout-wrapper">
   <div *ngIf="!isTokenExpired" class="checkout-box">
     <!-- Header -->
+    <div class="back-link" (click)="backTo()">
+      ← Back
+    </div>
     <div class="checkout-header">
       <img src="assets/images/logo.svg" alt="Logo" class="logo" />
       <h1>${{userInfo.amount}}</h1>

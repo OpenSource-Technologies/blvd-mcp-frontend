@@ -229,3 +229,18 @@ small {
     max-width: 95%;
   }
 }
+
+
+
+
+.back-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.back-link {
+  cursor: pointer;
+  font-weight: 500;
+}
